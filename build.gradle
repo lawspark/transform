@@ -70,7 +70,7 @@ release {
 }
 
 bootBuildImage {
-    runImage = 'ghcr.io/lawspark/libreoffice:v0.1'
+    runImage = 'ghcr.io/lawspark/libreoffice:v0.7'
     createdDate = 'now'
 
     if (project.hasProperty('dockerImageTags')) {
