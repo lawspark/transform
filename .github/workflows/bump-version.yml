@@ -1,0 +1,58 @@
+name: Bump version
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v2
+        id: bot-token
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Bump version and push tag
+        id: release
+        run: |
+          git config user.name "lawspark[bot]"
+          git config user.email "lawspark[bot]@users.noreply.github.com"
+          ./gradlew release \
+            -Prelease.git.pushToRemote=origin
+          TAG=$(git describe --tags --abbrev=0)
+          echo "new_tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          token: '${{ steps.bot-token.outputs.token }}'
+          tag: ${{ steps.release.outputs.new_tag }}
+          name: Release ${{ steps.release.outputs.new_tag }}
+          body: |
+            自动发布：版本 ${{ steps.release.outputs.new_tag }}
