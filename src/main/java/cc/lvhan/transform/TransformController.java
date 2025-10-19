@@ -3,6 +3,7 @@ package cc.lvhan.transform;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import static org.springframework.http.ResponseEntity.ok;
  * @author keveon
  */
 @RestController
+@Profile("!local")
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v1")
 public class TransformController {

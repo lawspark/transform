@@ -1,8 +1,7 @@
 plugins {
     id 'java'
-    id "com.gorylenko.gradle-git-properties" version "2.5.0"
     id 'net.researchgate.release' version '3.1.0'
-    id 'org.springframework.boot' version '3.4.5'
+    id 'org.springframework.boot' version '3.5.6'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -70,7 +69,7 @@ release {
 }
 
 bootBuildImage {
-    runImage = 'ghcr.io/lawspark/libreoffice:v0.7'
+    runImage = 'ghcr.io/lawspark/libreoffice:v0.8'
     createdDate = 'now'
 
     if (project.hasProperty('dockerImageTags')) {
