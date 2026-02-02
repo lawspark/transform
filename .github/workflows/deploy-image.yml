@@ -1,10 +1,9 @@
 name: Create and publish a Docker image
 
 on:
-  release:
-    types:
-      - published
   push:
+    branches:
+      - main
     tags:
       - v*
 
@@ -21,7 +20,6 @@ jobs:
       packages: write
 
     steps:
-
       - name: Checkout sources
         uses: actions/checkout@v4
 
@@ -37,7 +35,11 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
+            # main branch -> latest
+            type=raw,value=latest,enable={{is_default_branch}}
+            # tags -> semver
             type=ref,event=tag
+            type=semver,pattern=v{{version}}
             type=semver,pattern=v{{major}}.{{minor}}
             type=semver,pattern=v{{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
 
@@ -56,13 +58,8 @@ jobs:
 
       - name: Build & Push
         run: |
-          # 1. 先把 metadata-action 的输出读到 Bash 变量
           DOCKER_IMAGE_TAGS="${{ steps.meta.outputs.tags }}"
-
-          # 2. 用 Bash 参数替换把所有换行符（LF）替成逗号
           DOCKER_IMAGE_TAGS="${DOCKER_IMAGE_TAGS//$'\n'/,}"
-
-          # 3. 去掉末尾多余的逗号（如果有的话）
           DOCKER_IMAGE_TAGS="${DOCKER_IMAGE_TAGS%,}"
 
           echo "Using tags: $DOCKER_IMAGE_TAGS"
