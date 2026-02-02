@@ -1,6 +1,15 @@
 name: Create and publish a Docker image
 
 on:
+  # Allow manual re-runs (e.g. rebuild a historical tag)
+  workflow_dispatch:
+
+  # Publish semver images on release publish (works even when tag push is created by workflows)
+  release:
+    types:
+      - published
+
+  # Publish latest on main, and also support tag pushes (when they come from a human/app token)
   push:
     branches:
       - main
