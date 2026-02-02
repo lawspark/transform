@@ -15,10 +15,6 @@ env:
 
 jobs:
   bump-version:
-    # Stopgap: don't auto-release on dependency bump merges.
-    # Dependabot PRs land with commit messages like: "chore(deps): bump ..."
-    if: ${{ !contains(github.event.head_commit.message, 'chore(deps): bump') }}
-
     runs-on: ubuntu-latest
 
     permissions:
