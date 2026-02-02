@@ -1,13 +1,8 @@
 name: Bump version
 
 on:
-  # Manual trigger (recommended)
   workflow_dispatch:
 
-  # Auto trigger on main pushes, but gated below (skip dependabot bump merges)
-  push:
-    branches:
-      - main
 
 # Avoid parallel release attempts (can cause "remote changes to pull" failures)
 concurrency:
