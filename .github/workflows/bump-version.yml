@@ -1,9 +1,18 @@
 name: Bump version
 
 on:
+  # Manual trigger (recommended)
+  workflow_dispatch:
+
+  # Auto trigger on main pushes, but gated below (skip dependabot bump merges)
   push:
     branches:
       - main
+
+# Avoid parallel release attempts (can cause "remote changes to pull" failures)
+concurrency:
+  group: bump-version-main
+  cancel-in-progress: false
 
 env:
   REGISTRY: ghcr.io
@@ -11,6 +20,10 @@ env:
 
 jobs:
   bump-version:
+    # Stopgap: don't auto-release on dependency bump merges.
+    # Dependabot PRs land with commit messages like: "chore(deps): bump ..."
+    if: ${{ !contains(github.event.head_commit.message, 'chore(deps): bump') }}
+
     runs-on: ubuntu-latest
 
     permissions:
