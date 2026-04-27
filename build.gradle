@@ -50,7 +50,7 @@ dependencyManagement {
     dependencies {
         dependency "org.apache.commons:commons-lang3:3.18.0"
         dependency "org.assertj:assertj-core:3.27.7"
-        dependency "tools.jackson.core:jackson-core:3.1.1"
+        dependency "tools.jackson.core:jackson-core:3.1.2"
         dependency "org.apache.tomcat.embed:tomcat-embed-core:11.0.21"
 
         dependency "com.deepoove:poi-tl:${poiTLVersion}"
